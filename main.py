@@ -80,6 +80,13 @@ def main():
         "optimizer": optimizer.state_dict()
     }
     save_checkpoint(checkpoint)
+    df = pd.DataFrame({
+            "training_loss": training_loss,
+            "training_dice": training_acc,
+            "validation_loss": validation_loss,
+            "validation_dice": validation_acc
+        })
+    df.to_csv("training_metrics.csv", index=False)
 
 if __name__ == "__main__":
     main()
