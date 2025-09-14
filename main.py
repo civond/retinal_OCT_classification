@@ -54,14 +54,23 @@ def main():
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
     scaler = torch.amp.GradScaler(device=device)
 
+    training_loss = []
+    training_acc = []
+    validation_loss = []
+    validation_acc = []
+    
     for epoch in range(num_epochs):
         print(f"\nEpoch: {epoch}")
         # Train
         train_loss, train_acc = train_fn(device, train_loader, model, optimizer, loss_fn, scaler)
+        training_loss.append(train_loss)
+        training_acc.append(train_acc)
         print(f"Train Loss: {train_loss}")
         print(f"Train Acc: {train_acc}")
 
         valid_loss, valid_acc = valid_fn(device, valid_loader, model, optimizer, loss_fn, scaler)
+        validation_loss.append(valid_loss)
+        validation_acc.append(valid_acc)
         print(f"Valid Loss: {valid_loss}")
         print(f"Valid Acc: {valid_acc}")
 
