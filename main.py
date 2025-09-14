@@ -5,6 +5,7 @@ from torch.utils.data import DataLoader
 import torch.optim as optim
 import torch.nn as nn
 
+from utils.checkpoint import save_checkpoint
 from utils.train_fn import train_fn
 from utils.valid_fn import valid_fn
 from utils.create_transforms import create_train_transform, create_valid_transform
@@ -13,7 +14,7 @@ from model import resnet101
 learning_rate = 1e-4
 batch_size = 128
 num_epochs = 10
-num_workers = 4
+num_workers = 10
 image_height = 224
 image_width = 224
 pin_memory = True
@@ -63,6 +64,13 @@ def main():
         valid_loss, valid_acc = valid_fn(device, valid_loader, model, optimizer, loss_fn, scaler)
         print(f"Valid Loss: {valid_loss}")
         print(f"Valid Acc: {valid_acc}")
+
+    # Save checkpoint
+    checkpoint = {
+        "state_dict": model.state_dict(),
+        "optimizer": optimizer.state_dict()
+    }
+    save_checkpoint(checkpoint)
 
 if __name__ == "__main__":
     main()
