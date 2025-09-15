@@ -17,10 +17,10 @@ def train_fn(device, loader, model, optimizer, loss_fn, scaler):
 
 
         # forward pass
-        with torch.amp.autocast('cuda'):
-            #print(type(model(data))) <--- sanity check
-            predictions = model(data)  # <-- extract tensor
-            loss = loss_fn(predictions, labels)
+        #with torch.amp.autocast('cuda'): # mixed precision (but we want 3fp32)
+        #print(type(model(data))) <--- sanity check
+        predictions = model(data)  # <-- extract tensor
+        loss = loss_fn(predictions, labels)
 
         # backward pass
         optimizer.zero_grad()
