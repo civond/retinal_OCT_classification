@@ -4,9 +4,10 @@ from torchvision import datasets
 from torch.utils.data import DataLoader
 import torch.optim as optim
 import torch.nn as nn
-from torch.quantization import fuse_modules
 from torchao.quantization import quantize_, Int8DynamicActivationInt4WeightConfig
 from torchao.quantization.qat import QATConfig
+import warnings
+warnings.filterwarnings("ignore", message="Redirects are currently not supported")
 
 from utils.checkpoint import save_checkpoint
 from utils.train_fn import train_fn
@@ -16,7 +17,7 @@ from model import resnet101
 
 learning_rate = 1e-4
 batch_size = 64
-num_epochs = 10
+num_epochs = 1
 num_workers = 10
 image_height = 224
 image_width = 224
@@ -82,14 +83,24 @@ def main():
         print(f"Valid Acc: {valid_acc}")
 
         
+    quantize_(model, QATConfig(base_config, step="convert"))
+    model.eval()
+    torch.save(model.state_dict(), 'QAT_model.pth')
 
-        quantize_(model, QATConfig(base_config, step="convert"))
-        checkpoint = {
-        "state_dict": model.state_dict(),
-        "optimizer": optimizer.state_dict()
-        }
-        save_checkpoint(checkpoint, filename=f"quantized_checkpoint{epoch}.pth.tar")
-    # Save checkpoint
+
+    """model.to("cpu")
+    dummy_input = torch.randn(1, 1, 224, 224).to("cpu")  # adjust to your model’s input
+    torch.onnx.export(
+        model,
+        dummy_input,
+        "quantized_model.onnx",
+        export_params=True,
+        opset_version=17,   # recent opset for quantization
+        do_constant_folding=True,
+        input_names=["input"],
+        output_names=["output"],
+        dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
+    )"""
 
     df = pd.DataFrame({
             "training_loss": training_loss,
