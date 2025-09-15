@@ -17,7 +17,7 @@ from model import resnet101
 
 learning_rate = 1e-4
 batch_size = 64
-num_epochs = 1
+num_epochs = 20
 num_workers = 10
 image_height = 224
 image_width = 224
