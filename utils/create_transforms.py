@@ -28,11 +28,11 @@ def create_valid_transform(IMAGE_HEIGHT, IMAGE_WIDTH):
     return transform
 
 def create_inference_transform(IMAGE_HEIGHT, IMAGE_WIDTH):
-    transform = A.Compose([
-    A.Resize(IMAGE_HEIGHT, IMAGE_WIDTH),
+    transform = transforms.Compose([
     transforms.Grayscale(num_output_channels=1),
-    A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225)),
-    ToTensorV2()
-    ], additional_targets={'mask': 'mask'})
-    
+    transforms.Resize((IMAGE_HEIGHT, IMAGE_WIDTH)),
+    transforms.ToTensor(),
+    transforms.Normalize(mean=(0.5,), std=(0.5,))
+    ])
+
     return transform

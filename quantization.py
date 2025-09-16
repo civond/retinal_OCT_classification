@@ -82,7 +82,8 @@ def main():
         print(f"Valid Loss: {valid_loss}")
         print(f"Valid Acc: {valid_acc}")
 
-        
+    
+    
     quantize_(model, QATConfig(base_config, step="convert"))
     model.eval()
     torch.save(model.state_dict(), 'QAT_model.pth')
@@ -104,11 +105,11 @@ def main():
 
     df = pd.DataFrame({
             "training_loss": training_loss,
-            "training_dice": training_acc,
+            "training_acc": training_acc,
             "validation_loss": validation_loss,
-            "validation_dice": validation_acc
+            "validation_acc": validation_acc
         })
-    df.to_csv("training_metrics.csv", index=False)
+    df.to_csv("training_metrics_qat.csv", index=False)
     
 if __name__ == "__main__":
     main()

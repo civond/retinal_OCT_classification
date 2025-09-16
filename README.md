@@ -9,15 +9,23 @@
 </div></br>
 
 <p>
-    The ultimate goal of this project is not to create a state-of-the-art classification pipeline, but rather a personal exploration into model compression (specifically: quantization-aware training, and iterative pruning) for the purpose of deploying the model to a Raspberry Pi 5 for inference. Thus, I opted to choose the ResNet101 architecture over more-modern architectures such as MobileNet or EfficientNet due to its simplicity and good documentation. Initial training on this dataset yielded ~95% accuracy on the validation set as shown in figure 1.
+    The ultimate goal of this project is not to create a state-of-the-art classification pipeline, but rather a personal exploration into model compression (specifically: quantization-aware training, and iterative pruning) for the purpose of deploying the model to a Raspberry Pi 5 for inference. Thus, I opted to choose the ResNet101 architecture over more-modern architectures such as MobileNet or EfficientNet due to its simplicity and good documentation. 
 </p>
 <div align="center">
     <img src="figures/normal_metrics.png" width=500px></br></br>
 </div>
 <p>
-    Initial training on this dataset yielded ~95% accuracy on the validation set. To prepare the model for deployment in embedded environments, it is a necessity to convert from 32-bit floating bit numbers to an 8-bit integer. However, directly making this conversion after training induces quantization noise, which results in a degradation of classification accuracy. 
+    Normal training on this dataset yielded ~96% accuracy on the testing set. However, in order to prepare the model for deployment in embedded environments, it is necessary to convert the 32-bit floating bit weights to 8-bit integers. Directly making this conversion after training induces quantization noise, which results in a degradation of classification accuracy. 
 </p>
 
+<div align="center">
+    <img src="figures/normal_confusion_matrix.png" width=500px></br></br>
+</div>
+
 <p>
-    In order to make the model more-robust to quantization noise, I simulated quantization during model training using torchao. The resulting peformance can be seen in figure 1.
+   In order to make the model more robust to quantization noise, I inserted fake quantization operators into the model to simulate this noise. During inference, this yielded ~95%, which is not a significant drop in accuracy.
 </p>
+
+<div align="center">
+    <img src="figures/qat_confusion_matrix.png" width=500px></br></br>
+</div>

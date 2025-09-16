@@ -10,6 +10,7 @@ from utils.create_transforms import create_train_transform, create_valid_transfo
 from utils.valid_fn import valid_fn
 from torchvision import datasets
 from torch.utils.data import DataLoader
+from torchao.quantization import quantize_, Int8DynamicActivationInt4WeightConfig
 
 """model = resnet101(num_classes=4)
 print(f"Base: {model.fc}")
@@ -44,9 +45,10 @@ def main():
     model = resnet101(num_classes=4).eval()
     state_dict = torch.load('QAT_model.pth')
     model.load_state_dict(state_dict, assign=True)
+    model.eval()
     print(model.fc)
 
-    model.to("cpu")
+    """model.to("cpu")
 
     # Reset final FC layer. The model should be resilient to quantization error now.
     def reset_fc(model, num_classes):
@@ -77,7 +79,7 @@ def main():
         input_names=["input"],
         output_names=["output"],
         dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
-    )
+    )"""
     
     """# Create validation data loader
     valid_transform = create_valid_transform(image_height, image_width)

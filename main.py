@@ -82,11 +82,11 @@ def main():
     save_checkpoint(checkpoint)
     df = pd.DataFrame({
             "training_loss": training_loss,
-            "training_validation_acc": training_acc,
+            "training_acc": training_acc,
             "validation_loss": validation_loss,
             "validation_acc": validation_acc
         })
-    df.to_csv("training_metrics.csv", index=False)
+    df.to_csv("training_metrics_normal.csv", index=False)
 
 if __name__ == "__main__":
     main()
