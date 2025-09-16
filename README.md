@@ -19,8 +19,5 @@
 </p>
 
 <p>
-    In order to make the model more-robust to quantization noise, I simulated quantization during model training using torchao. The resulting peformance can be seen in figure 2.
+    In order to make the model more-robust to quantization noise, I simulated quantization during model training using torchao. The resulting peformance can be seen in figure 1.
 </p>
-<div align="center">
-    <img src="figures/QAT_metrics.png" width=500px></br></br>
-</div>

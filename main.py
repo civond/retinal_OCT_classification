@@ -12,8 +12,8 @@ from utils.create_transforms import create_train_transform, create_valid_transfo
 from model import resnet101
 
 learning_rate = 1e-4
-batch_size = 128
-num_epochs = 10
+batch_size = 64
+num_epochs = 20
 num_workers = 10
 image_height = 224
 image_width = 224
@@ -82,9 +82,9 @@ def main():
     save_checkpoint(checkpoint)
     df = pd.DataFrame({
             "training_loss": training_loss,
-            "training_dice": training_acc,
+            "training_validation_acc": training_acc,
             "validation_loss": validation_loss,
-            "validation_dice": validation_acc
+            "validation_acc": validation_acc
         })
     df.to_csv("training_metrics.csv", index=False)
 
