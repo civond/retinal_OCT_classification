@@ -4,7 +4,7 @@ import seaborn as sns
 from sklearn.metrics import confusion_matrix, accuracy_score
 
 # Load CSV
-df = pd.read_csv("./csv/inference_results_qat.csv")
+df = pd.read_csv("./csv/inference_results_int8.csv")
 
 # Extract actual & predicted labels
 y_true = df["actual_label"]

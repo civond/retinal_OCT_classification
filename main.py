@@ -75,11 +75,15 @@ def main():
         print(f"Valid Acc: {valid_acc}")
 
     # Save checkpoint
-    checkpoint = {
+    """checkpoint = {
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict()
     }
-    save_checkpoint(checkpoint)
+    save_checkpoint(checkpoint)"""
+
+    model.eval()
+    torch.save(model.state_dict(), 'normal_model.pth')
+
     df = pd.DataFrame({
             "training_loss": training_loss,
             "training_acc": training_acc,

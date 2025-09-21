@@ -5,25 +5,22 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+from torchao.quantization.qat import QATConfig
 from utils.checkpoint import load_checkpoint  # your checkpoint loader
 from utils.create_transforms import create_train_transform, create_valid_transform
 from utils.valid_fn import valid_fn
 from torchvision import datasets
 from torch.utils.data import DataLoader
 from torchao.quantization import quantize_, Int8DynamicActivationInt4WeightConfig
-
-"""model = resnet101(num_classes=4)
-print(f"Base: {model.fc}")
-base_config = Int8DynamicActivationInt4WeightConfig(group_size=32)
-quantize_(model, QATConfig(base_config, step="prepare"))
-print(f"Quant: {model.fc}")
-
-# Convert
-quantize_(model, QATConfig(base_config, step="convert"))
-model.eval()
-torch.save(model.state_dict(), 'test.pth')"""
+import torch.ao.quantization as quant
+from torchao.quantization.pt2e.quantize_pt2e import (
+  prepare_qat_pt2e,
+  prepare_pt2e,
+  convert_pt2e,
+)
 
 
+print(torch.__version__)
 
 
 learning_rate = 1e-4
@@ -39,14 +36,24 @@ train = True
 train_dir = "./data_train/"
 valid_dir = "./data_valid/"
 test_dir = "./data_test/"
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+### THIS IS THE ONE
 def main():
     # Loading
-    model = resnet101(num_classes=4).eval()
-    state_dict = torch.load('QAT_model.pth')
-    model.load_state_dict(state_dict, assign=True)
-    model.eval()
+    model = resnet101(num_classes=4)
+    base_config = Int8DynamicActivationInt4WeightConfig(group_size=32)
+    quantize_(model, QATConfig(base_config, step="prepare"))
     print(model.fc)
+
+    quantize_(model, QATConfig(base_config, step="convert"))
+    model.eval()
+    torch.save(model, './tmp/test.pth')
+
+    """model = resnet101(num_classes=4).eval()
+    state_dict = torch.load('QAT_model.pth')
+    model.load_state_dict(state_dict, assign=True)"""
+
 
     """model.to("cpu")
 
@@ -81,7 +88,7 @@ def main():
         dynamic_axes={"input": {0: "batch_size"}, "output": {0: "batch_size"}},
     )"""
     
-    """# Create validation data loader
+    # Create validation data loader
     valid_transform = create_valid_transform(image_height, image_width)
     valid_dataset = datasets.ImageFolder(root=test_dir, transform=valid_transform)
     valid_loader = DataLoader(valid_dataset, 
@@ -99,6 +106,6 @@ def main():
 
     print(f"Valid Loss: {valid_loss}")
     print(f"Valid Acc: {valid_acc}")
-    """
+    
 if __name__ == "__main__":
     main()
