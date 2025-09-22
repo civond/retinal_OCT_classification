@@ -34,3 +34,5 @@
 <div align="center">
     <img src="figures/qat_confusion_matrix.png" width=500px></br></br>
 </div>
+</br>
+Inference time for the quantized model was roughly ~28ms per sample on CPU.
