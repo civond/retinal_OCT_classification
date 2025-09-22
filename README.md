@@ -35,4 +35,4 @@
     <img src="figures/qat_confusion_matrix.png" width=500px></br></br>
 </div>
 </br>
-Inference time for the quantized model was roughly ~28ms per sample on CPU.
+Torchao's API is optimized to provide optimizations on CPU inference. Normal CPU inference with ResNet101 required approximately 170ms per sample, whereas the inference time for the quantized model was roughly ~28ms per sample (a roughly a 6x speedup).
